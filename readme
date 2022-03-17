@@ -1,0 +1,77 @@
+# # create miniconda virtual machine (linux)
+cd /tmp
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+sh Miniconda3-latest-Linux-x86_64.sh -b
+/home/hsiehpinghan/miniconda3/bin/conda create --name mmcls python=3.7
+export MINICONDA_HOME=/home/hsiehpinghan/miniconda3
+export PATH=$MINICONDA_HOME/bin:$PATH
+conda init bash
+conda activate mmdet
+conda install -c anaconda pytest
+conda install -c pytorch pytorch torchvision cpuonly
+pip install -r requirements.txt
+pip install mmcv-full==1.4.2
+pip install timm
+
+# start miniconda jupyter notebook (linux)
+export ANACONDA_HOME=/home/hsiehpinghan/anaconda3
+export PATH=$ANACONDA_HOME/bin:$PATH
+cd /home/hsiehpinghan/git/mmdetection/notebook
+conda activate mmdet
+jupyter notebook
+
+# install mmdet
+cd /home/hsiehpinghan/git/mmdetection
+pip install -e .
+
+# Model Zoo
+## Architectures - Object Detection
+2015/04/30 Fast R-CNN
+2015/06/04 Faster R-CNN
+2015/06/04 RPN
+2015/12/08 SSD
+2017/08/07 RetinaNet
+2019/06/24 Cascade R-CNN
+2018/04/08 YOLOv3
+2018/08/03 CornerNet
+2018/11/29 Grid R-CNN
+2019/01/10 Guided Anchoring
+2019/03/02 FSAF
+2019/04/16 CenterNet
+2019/04/04 Libra R-CNN
+2019/01/07 TridentNet
+2019/04/02 FCOS
+2019/04/25 RepPoints
+2019/09/05 FreeAnchor
+2019/09/15 CascadeRPN
+2020/07/16 Foveabox
+2019/04/13 Double-Head R-CNN
+2019/12/05 ATSS
+2019/06/11 NAS-FCOS
+2020/07/07 AutoAssign
+2019/12/09 Side-Aware Boundary Localization
+2020/04/13 Dynamic R-CNN
+2020/05/26 DETR
+2020/09/05 PAA
+2020/08/31 VarifocalNet
+2020/11/25 Sparse R-CNN
+2021/03/17 YOLOF
+2021/07/18 YOLOX
+2020/10/08 Deformable DETR
+2021/08/17 TOOD
+
+## Components
+2014/09/04 VGG
+2015/12/10 ResNet
+2016/11/16 ResNeXt
+2018/01/13 MobileNetV2
+2019/02/25 HRNet
+2019/04/11 Generalized Attention
+2019/04/25 GCNet
+2019/04/02 Res2Net
+2020/03/30 RegNet
+2020/04/19 ResNeSt
+2021/02/24 PVT
+2021/03/25 Swin
+2021 /02/24 PVTv2
+2021/10/01 ResNet strikes back
