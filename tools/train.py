@@ -206,4 +206,14 @@ def main():
 
 
 if __name__ == '__main__':
+    import sys
+    from mmcv.utils.config import ConfigDict
+    ConfigDict.device = 'cpu'
+
+    sys.argv = [sys.argv[0]]
+    sys.argv += ['/home/hsiehpinghan/git/mmdetection/configs/yolox/yolox_finetune_back_id_card_detect.py']
+    sys.argv += ['--work-dir', '/tmp']
+    sys.argv += ['--gpu-ids', '0']
+    sys.argv += ['--seed', '42']
+    args = parse_args()
     main()

@@ -58,35 +58,42 @@ def pytorch2torchscript(model: nn.Module, input_shape: tuple, show: bool,
     img_list = [img[None, :] for img in imgs]
 
     # replace original forward function
-    origin_forward = model.forward
-    model.forward = partial(model.forward, img_metas={}, return_loss=False)
-
+    model.forward = model.forward_dummy
+    model.eval()
     with torch.no_grad():
 
-        print(type(model), model)
+        trace_model = torch.jit.trace(func=model,
+                                      example_inputs=img_list[0])
+        
+        #def forward(self, img, img_metas, return_loss=True, **kwargs):
 
-        trace_model = torch.jit.trace(model, img_list)
+
+        #print(trace_model)
+        #raise 'aaa'
+
+        output = trace_model(torch.ones(1, 3, 640, 640))
+
+        cls_score = output[0]
+        bbox_pred = output[1]
+        objectness = output[2]
+        #print(cls_score[0].shape, '!!!')
+        #print(cls_score[1].shape, '!!!')
+        #print(cls_score[2].shape, '!!!')
+        #print(bbox_pred[0].shape, '!!!')
+        #print(bbox_pred[1].shape, '!!!')
+        #print(bbox_pred[2].shape, '!!!')
+        print(objectness[0].shape, '!!!')
+        print(objectness[1].shape, '!!!')
+        print(objectness[2].shape, '!!!')
+
+        raise 'aaa'
+
+
         save_dir, _ = osp.split(output_file)
         if save_dir:
             os.makedirs(save_dir, exist_ok=True)
         trace_model.save(output_file)
         print(f'Successfully exported TorchScript model: {output_file}')
-    model.forward = origin_forward
-
-    if verify:
-        # load by torch.jit
-        jit_model = torch.jit.load(output_file)
-
-        # check the numerical value
-        # get pytorch output
-        pytorch_result = model(img_list, img_metas={}, return_loss=False)[0]
-
-        # get jit output
-        jit_result = jit_model(img_list[0])[0].detach().numpy()
-        if not np.allclose(pytorch_result, jit_result):
-            raise ValueError(
-                'The outputs are different between Pytorch and TorchScript')
-        print('The outputs are same between Pytorch and TorchScript')
 
 
 def parse_args():
@@ -135,7 +142,7 @@ if __name__ == '__main__':
     sys.argv = [sys.argv[0]]
     sys.argv += ['/home/hsiehpinghan/git/mmdetection/configs/yolox/yolox_finetune_back_id_card_detect.py']
     sys.argv += ['--checkpoint', '/home/hsiehpinghan/git/mmdetection/checkpoint/best_bbox_mAP_epoch_9.pth']
-    sys.argv += ['--show']
+    #sys.argv += ['--show']
     sys.argv += ['--verify']
     sys.argv += ['--output-file', '/tmp/yolox_finetune_back_id_card_detect.pt']
     args = parse_args()

@@ -5,7 +5,7 @@ model = dict(bbox_head=dict(num_classes=14))
         
 # Dataset config
 dataset_type = 'CocoDataset'
-data_root = '/tmp/back_id_card_detect_augmented'
+data_root = '/home/hsiehpinghan/git/mmdetection/dataset/back_id_card_detect_augmented'
 #img_scale = (941, 567)
 img_scale = (640, 640)
 
